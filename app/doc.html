@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scanner de Documentos</title>
+
+    <!-- Bootstrap CSS via CDN (ou faça o download e referencie localmente) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif
+        }
+
+        .borda-verde {
+            border: 2px solid green;
+        }
+
+        /* Adiciona a classe "borda-azul" para a borda azul */
+       
+
+        @keyframes simularValidacao {
+
+            0%,
+            100% {
+                left: 0;
+            }
+
+            50% {
+                left: 100%;
+            }
+        }
+
+        .borda-azul {
+            border: 2px solid blue;
+        }
+
+        #bt_camera {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            border: 2px solid #0d6efd;
+            /* Borda fina azul */
+            border-radius: 50%;
+            /* Transforma em um círculo */
+            background-color: #fff;
+            /* Cor de fundo branca */
+            display: flex;
+            transform: translateX(-50%);
+            align-items: center;
+            padding: 0;
+            justify-content: center;
+            /* Remove o preenchimento interno para ajustar o tamanho */
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            /* Adiciona uma transição suave */
+
+        }
+
+        #bt_camera::before {
+            content: "";
+            width: 45px;
+            height: 45px;
+            background-color: #0d6efd;
+            /* Círculo pequeno azul no centro */
+            border-radius: 50%;
+            position: absolute;
+        }
+
+
+
+        @keyframes clickEffect {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .rotacionar-vertical {
+            transform: rotate(90deg);
+        }
+
+        /* .girar-imagem {
+            transform: rotateY(180deg);
+            transition: transform 2s ease-in-out;
+        } */
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <p  id="obs" style="font-weight: bold; text-align: center;">Tire da capinha e clique no botão para iniciar a captura</p>
+    </div>
+    
+
+    <div class="container mt-5">
+        <h4 class="mb-4" style="text-align: center; margin-bottom: 20px;" id="tituloPG">Parte da <strong
+                style="color: green;">Frente</strong> RG ou CNH, na posição indicada</h4>
+        
+
+        <button class="btn btn-primary mt-3 rounded-circle"
+        style="position: relative; color: #0d6efd; padding: 30px;" id="bt_camera"
+        onclick="capturarImagem()"></button>
+
+        <div class="rotacionar-vertical">
+            <p><img src="img/frente.jpeg" id="imagemFrente" class="img-fluid borda-verde"
+                    style="border-radius: 20px; width: 400px;" alt=""></p>
+        </div>
+
+        <!-- Visualização da câmera -->
+        <div id="gridCamera" style="display: none; transform: rotate(0deg);">
+            <video id="camera" class="img-fluid" width="width: 400px;"
+                style="border: #a5abb6 2px solid; border-radius: 20px; transform: rotate(0deg);" height="auto" autoplay></video>
+
+            <!-- Botão para capturar imagem -->
+            <div id="bt_capture"></div>
+
+            <button class="btn btn-primary mt-3 rounded-circle"
+                style="position: relative; color: #0d6efd; padding: 30px;" id="bt_camera"
+                onclick="capturarImagem()"></button>
+
+        </div>
+
+        <!-- Resultados do console -->
+        <div class="mt-3" id="img-capturada" style="display: none;">
+
+
+            <div style="position: relative; margin-bottom: 20px;">
+                <img id="imagemCapturada" class="img-fluid" alt="Imagem Capturada"
+                    style="opacity: 0.6;  border-radius: 20px;">
+                <div id="barraSimulada"
+                    style="position: absolute; top: 0; left: 0; height: 100%; width: 10px; background-color: rgb(0, 255, 55); animation: simularValidacao 2s linear infinite;">
+                </div>
+            </div>
+
+            <p class="mt-3">Validando...</p>
+        </div>
+
+
+
+    </div>
+
+    <!-- Bootstrap JS via CDN (ou faça o download e referencie localmente) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tesseract.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
+
+    <script>
+
+        var tipoDoc = "0"
+
+        async function iniciarCamera() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const cameras = devices.filter(device => device.kind === 'videoinput');
+
+                // Encontre a câmera traseira (se disponível)
+                const cameraTraseira = cameras.find(camera => camera.label.toLowerCase().includes('back'));
+
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        deviceId: cameraTraseira ? { exact: cameraTraseira.deviceId } : undefined,
+                    }
+                });
+
+                const camera = document.getElementById('camera');
+                camera.srcObject = stream;
+            } catch (error) {
+                console.error('Erro ao acessar a câmera:', error);
+            }
+        }
+
+        async function capturarImagem() {
+            const camera = document.getElementById('camera');
+
+            // Crie um canvas temporário para capturar a imagem
+            const canvas = document.createElement('canvas');
+            canvas.width = camera.videoWidth;
+            canvas.height = camera.videoHeight;
+
+            const contexto = canvas.getContext('2d');
+            contexto.drawImage(camera, 0, 0, canvas.width, canvas.height);
+
+            // Exiba a imagem capturada em uma tag de imagem
+            const imagemCapturada = document.getElementById('imagemCapturada');
+            imagemCapturada.src = canvas.toDataURL('image/png');
+
+            // Simule a validação com a barra passando
+            const barraSimulada = document.getElementById('barraSimulada');
+            barraSimulada.style.animation = 'simularValidacao 2s linear infinite';
+
+            // Pare o streaming da câmera
+            // const stream = camera.srcObject;
+            // const tracks = stream.getTracks();
+            // tracks.forEach(track => track.stop());
+
+            // Exiba a div com a imagem capturada
+            const divCapturada = document.getElementById('img-capturada');
+            divCapturada.style.display = 'inline';
+
+
+            // Esconde botao e Camera
+            const divbt_camera = document.getElementById('bt_camera');
+            bt_camera.style.display = 'none';
+
+            const divcamera = document.getElementById('camera');
+            camera.style.display = 'none';
+
+            const divobs = document.getElementById('obs');
+            divobs.style.display = 'none';
+
+
+            // Realize OCR na imagem
+            const result = await Tesseract.recognize(
+                canvas,
+                'por', // Define o idioma para português
+                { logger: info => console.log(info) } // Função de callback para exibir informações no console
+            );
+
+
+            const ocrDOC = {
+                "tipoDoc": tipoDoc,
+                "ocr": result.data.text
+
+            }
+
+
+            const jsonString = JSON.stringify(ocrDOC);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+
+            const blobURL = URL.createObjectURL(blob);
+
+            if (tipoDoc == 0) {
+                localStorage.setItem('frenteDocumento', blobURL);
+            } else {
+                localStorage.setItem('versoDocumento', blobURL);
+            }
+
+
+            console.log(result.data.text); // Exibe o texto extraído no console
+            alert(result.data.text)
+            // Envia o texto para a API em localhost:8000/status
+            enviarTextoParaAPI(result.data.text);
+        }
+
+        function proximo() {
+            // Adicione a lógica para a ação do botão "Próximo" aqui
+            console.log('Botão Próximo pressionado.');
+        }
+
+        function realizarNovaCaptura() {
+            // Adicione a lógica para a ação do botão "Realizar Nova Captura" aqui
+            location.reload(); // Recarrega a página
+        }
+
+        function enviarTextoParaAPI(texto) {
+
+            // Define a URL da API
+            const apiUrl = 'http://200.98.160.150:8000/server';
+
+            // Faz a requisição POST para a API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ dados: texto, tipo: tipoDoc }), // Envia o texto como JSON
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(tipoDoc)
+
+                    console.log(`Tipo de doc ${tipoDoc}`)
+
+
+                    if (data.status === true && tipoDoc == 0) {
+                        ativaVerso();
+                    }
+                    else {
+                        location.reload();
+                    }
+
+                    tipoDoc = 1
+                })
+                .catch(error => console.error('Erro ao enviar para a API:', error));
+        }
+
+        function ativaVerso() {
+            // Obtém a referência da imagem
+            const imagemFrente = document.querySelector('#imagemFrente');
+
+            // Adiciona uma classe para aplicar o efeito de girar
+            //magemFrente.classList.add('girar-imagem');
+
+
+            // Remove a classe 'borda-verde' e adiciona a classe 'borda-azul' para a borda azul
+            imagemFrente.classList.remove('borda-verde');
+            imagemFrente.classList.add('borda-azul');
+
+
+
+            // Aguarde 1 segundo (1000 milissegundos) antes de substituir a imagem
+            setTimeout(() => {
+
+                // Obtém uma referência ao elemento h4 com o id "tituloPG"
+                const tituloPG = document.getElementById('tituloPG');
+
+                // Define o novo conteúdo que você deseja adicionar
+                const novoConteudo = 'Parte <strong>Verso</strong> RG ou CNH';
+
+                // Limpa o conteúdo atual e adiciona o novo conteúdo
+                tituloPG.innerHTML = novoConteudo;
+
+                // Substitui a imagem da frente pela imagem do verso
+                imagemFrente.src = 'img/verso.jpeg';
+
+                const divCapturada = document.getElementById('img-capturada');
+                divCapturada.style.display = 'none';
+
+                // Esconde botao e Camera
+                const divbt_camera = document.getElementById('bt_camera');
+                bt_camera.innerHTML = '<button class="btn btn-primary mt-3 rounded-circle" id="bt_enviar"  onclick="capturarFace()"></button>'
+                bt_camera.style.display = 'inline';
+
+                const divcamera = document.getElementById('camera');
+                camera.style.display = 'inline';
+
+
+
+            }, 1000);
+        }
+
+        // Inicie a câmera quando a página carregar
+        //window.onload = iniciarCamera;
+    </script>
+
+
+
+</body>
+
+</html>

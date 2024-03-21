@@ -1,0 +1,20 @@
+FROM php:8-apache
+
+# Define o diretório de trabalho
+WORKDIR /var/www/html
+
+#Copia todos os arquivos para o Container
+COPY . .
+
+
+# Copiar o arquivo de configuração personalizado
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
+
+# Ativar mod_rewrite
+RUN a2enmod rewrite
+
+# Instalar a extensão mysqli
+RUN docker-php-ext-install mysqli
+
+# Reiniciar o Apache
+CMD ["apache2-foreground"]

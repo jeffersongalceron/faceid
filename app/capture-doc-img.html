@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture DOC</title>
+    <!-- Bootstrap CSS via CDN (ou faça o download e referencie localmente) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/default.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h4 class="mb-4" style="text-align: center; " id="tituloPG"></h4>
+    </div>
+
+
+
+    <div class="rotacionar-vertical">
+        <img id="imagemDocumento" style="border-radius: 20px; text-align: center;" alt="Imagem">
+    </div>
+
+    <!-- Botão para capturar imagem -->
+    <div class="text-center mt-3">
+        <button class="btn btn-primary rounded-circle" style="position: relative; color: #0d6efd; padding: 30px;"
+            id="bt_camera" onclick="app.iniciarCaptura();"></button>
+    </div>
+
+</body>
+<script src="js/app.js"></script>
+
+<script>
+   
+
+
+
+    //const imagem = document.querySelector('#imagemDocumento');
+    const imagem = document.getElementById('imagemDocumento');
+
+    const tituloPG = document.getElementById('tituloPG');
+
+    // Define o novo conteúdo que você deseja adicionar
+    var novoConteudo = '';
+
+    //
+    if (!localStorage.getItem('frenteDocumento')) {
+        novoConteudo = 'Parte da <strong style="color: green;">Frente</strong> RG ou CNH, na posição indicada'
+        imagem.src = 'img/frente.jpeg';
+    } else {
+        novoConteudo = 'Parte <strong>Verso</strong> RG ou CNH';
+        imagem.src = 'img/verso.jpeg';
+    }
+
+    tituloPG.innerHTML = novoConteudo;
+
+    imagem.style.width = '600px';
+    imagem.style.margin = '0px'
+    imagem.style.marginTop = '10px'
+    imagem.classList.add('img-fluid');
+</script>
+
+</html>

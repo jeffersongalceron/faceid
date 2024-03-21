@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formulário de Cadastro - BX2BET</title>
+
+    <!-- Bootstrap CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/default.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 56px;
+            /* Altura do menu fixo */
+        }
+
+     
+    </style>
+    <script>
+        function gerarNumero() {
+  // Gera um número aleatório entre 1000 e 10000
+  var numeroAleatorio = Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
+
+  // Define o valor do input com o número aleatório gerado
+  document.getElementById("id").value = numeroAleatorio;
+}
+    </script>
+</head>
+
+<body>
+
+    <!-- Menu -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container" style="text-align: center;">
+            <a class="navbar-brand" href="#"><img src="https://www.b2xbet.net/logo.png" width="150" alt=""></a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h4 class="mb-4" style="text-align: center;">Formulário de Cadastro</h4>
+        <form action="./" method="post">
+            <!-- Nome Completo -->
+            <div class="mb-3">
+                <label for="nomeCompleto" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="nomeCompleto" class="form-label">Sobrenome</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" required>
+            </div>
+
+            <!-- CPF -->
+            <div class="mb-3">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="cpf" name="cpf"
+                    title="Informe um CPF válido (XXX.XXX.XXX-XX)" required>
+            </div>
+
+        
+            <!-- Data de Nascimento -->
+            <div class="mb-3">
+                <label for="birthdate_str" class="form-label">Data de Nascimento</label>
+                <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf_status" class="form-label">CPF STATUS</label>
+                <input type="text" class="form-control" id="cpf_status" name="cpf_status" value="REGULAR">
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf_status" class="form-label">Messagem</label>
+                <input type="text" class="form-control" id="cpf_status" name="message" value="true">
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf_status" class="form-label">Messagem Eng</label>
+                <input type="text" class="form-control" id="message_en" name="message_en" value="true">
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf_status" class="form-label">Token Transação:</label>
+                <input type="text" class="form-control" id="id" name="id" value="30" >
+            </div>
+
+            <input type="hidden" name="status" value="">
+            <input type="hidden" name="token" value="53847e1e-97dc-4ddc-96f8-82c63a58aa2d" >
+    
+   
+
+   
+
+            <!-- Botão de Envio -->
+            <input type="submit" class="btn btn-primary" name="submit" value="Enviar">
+
+        </form>
+    </div>
+
+    <style>
+        body {
+          background-color: #333;
+          color: #fff;
+        }
+        pre {
+          background-color: #222;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+          overflow-x: auto;
+        }
+      </style>
+      </head>
+      <body>
+
+    <hr>
+      
+      <h2>Implementação de Código HTML</h2>
+      <p>Copie o código abaixo e cole em sua página:</p>
+      
+      <pre><code id="codigoHTML">&lt;!DOCTYPE html&gt;
+      &lt;html lang="pt-br"&gt;
+      &lt;head&gt;
+      &lt;meta charset="UTF-8"&gt;
+      &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+      &lt;title&gt;Minha Página&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+      
+      &lt;h1&gt;Minha Página&lt;/h1&gt;
+      &lt;p&gt;Este é um exemplo de página HTML.&lt;/p&gt;
+      
+      &lt;/body&gt;
+      &lt;/html&gt;
+      </code></pre>
+      
+      <button onclick="copiarCodigo()">Copiar Código</button>
+      
+      <script>
+      function copiarCodigo() {
+        var codigo = document.getElementById('codigoHTML');
+        var selecionar = document.createRange();
+        selecionar.selectNodeContents(codigo);
+        var selecao = window.getSelection();
+        selecao.removeAllRanges();
+        selecao.addRange(selecionar);
+        document.execCommand('copy');
+        alert('Código copiado para a área de transferência!');
+      }
+      </script>
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 FACEID BRASIL | <p id="versao"></p> </p>
+        </div>
+    </footer>
+
+    
+    <script>
+        gerarNumero();
+
+        localStorage.clear();
+
+    </script>
+
+<script>
+    // Faça uma requisição para o arquivo versao.txt
+    fetch('versao.txt')
+        .then(response => response.text())
+        .then(data => {
+            // Atualize o conteúdo do parágrafo com a versão
+            document.getElementById('versao').textContent = data;
+        })
+        .catch(error => {
+            console.error('Erro ao ler versao.txt:', error);
+        });
+</script>
+
+    <!-- Bootstrap JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

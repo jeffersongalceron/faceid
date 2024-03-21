@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture DOC</title>
+
+    <!-- Bootstrap CSS via CDN (ou faça o download e referencie localmente) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/default.css" rel="stylesheet">
+
+
+
+</head>
+
+<body class="d-flex justify-content-center align-items-center min-vh-100">
+
+    <div class="container mt-5">
+        <p id="obs" style="font-weight: bold; text-align: center; font-size: x-large;"></p>
+
+
+        <p id="obs" style="font-weight: bold; text-align: center; font-size: x-large;"></p>
+
+
+
+    </div>
+    <script>
+        const divTitulo1 = document.getElementById('obs');
+
+        if (localStorage.getItem('e2')) {
+
+            if (localStorage.getItem('frenteDocumento') === '0000000f-97dc-4ddc-96f8-82c63a58aa2d' || localStorage.getItem('versoDocumento') === '0000000v-97dc-4ddc-96f8-82c63a58aa2d') {
+                divTitulo1.innerHTML = "Parabéns! Seus dados foram validados com sucesso. 😊"
+            } else {
+
+                divTitulo1.innerHTML = "Desculpe, não foi possíel validar seus dados. 😔"
+
+            }
+
+        }
+        else {
+            divTitulo1.innerHTML = "Desculpe, não foi possíel validar seus dados. 😔"
+        }
+
+    </script>
+
+</body>
+
+</html>

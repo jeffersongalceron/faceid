@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rereconhecimento Facial - Grupo Pereira</title>
+    <script defer src="js/face-api.min.js"></script>
+    <script defer src="js/script_ocr.js"></script>
+    <script src="js/config.js"></script>
+
+
+
+    <!-- Bootstrap CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+    <link href="css/default.css" rel="stylesheet">
+    <script>
+        //Impedir a rotação automática
+        window.addEventListener('orientationchange', function () {
+            if (window.orientation !== 0) {
+                alert("Você precisa bloquear a rotação do celular para continuar!");
+                location.reload();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.orientation !== 0) {
+                alert("Você precisa bloquear a rotação do celular para continuar!");
+                location.reload();
+            }
+        });
+
+    </script>
+</head>
+
+
+<body>
+
+    <div class="container mt-5">
+        <h4 class="mb-4" style="text-align: center; " id="tituloPG"></h4>
+    </div>
+
+    <div id="grid-video" class="text-center">
+        <video id="video" autoplay playsinline width="100%" height="100%"></video>
+    </div>
+
+    <!-- Resultados do console style="opacity: 0.6; " -->
+
+    <div id="img-capturada" class="mt-3" style="display: none; text-align: center;">
+        <div style="position: relative; margin-bottom: 20px;">
+            <img id="imagemCapturada" alt="Imagem Capturada" class="img-fluid">
+            <div id="barraSimulada"
+                style="position: absolute; top: 0; left: 0; height: 100%; width: 10px; background-color: rgb(0, 255, 55); animation: simularValidacao 2s linear infinite;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão para capturar imagem -->
+    <div class="text-center mt-3" id="bt_aguarde" style="display: none;">
+        Arguarde ...
+    </div>
+
+</body>
+<!-- Tesseract.js via CDN -->
+<script src="./js/tesseract.min.js"></script>
+
+
+<script>
+
+
+
+
+    const tituloPG = document.getElementById('tituloPG');
+    var tipoDoc = "0"
+
+    if (!localStorage.getItem('frenteDocumento')) {
+        novoConteudo = 'Parte da <strong style="color: green;">Frente</strong> RG ou CNH, na posição indicada'
+    } else {
+        novoConteudo = 'Parte <strong>Verso</strong> RG ou CNH';
+        tipoDoc = "1"
+    }
+
+    tituloPG.innerHTML = novoConteudo;
+
+    async function iniciarCamera() {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const cameras = devices.filter(device => device.kind === 'videoinput');
+
+            // Encontre a câmera traseira (se disponível)
+            const cameraTraseira = cameras.find(camera => camera.label.toLowerCase().includes('back'));
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    deviceId: cameraTraseira ? { exact: cameraTraseira.deviceId } : undefined,
+                }
+            });
+
+            const camera = document.getElementById('video');
+            camera.srcObject = stream;
+        } catch (error) {
+            console.error('Erro ao acessar a câmera:', error);
+        }
+    }
+
+    function ocr() {
+
+        window.location.href = 'capture-doc-ocr.html';
+    }
+
+    if(localStorage.getItem('facedoc')){
+        window.location.href = 'capture-doc-ocr.html';
+    }
+
+    window.onload = iniciarCamera;
+
+    localStorage.setItem('totalFaceDoc', 0)
+
+</script>
+
+
+</body>
+
+</html>

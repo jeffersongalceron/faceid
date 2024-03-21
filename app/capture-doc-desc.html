@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture DOC</title>
+
+    <!-- Bootstrap CSS via CDN (ou faça o download e referencie localmente) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/default.css" rel="stylesheet">
+</head>
+<body class="d-flex justify-content-center align-items-center min-vh-100">
+    
+    <div class="container mt-5">
+        <p id="obs" style="font-weight: bold; text-align: center; font-size: x-large;">Por favor, retire seu RG ou CNH da capinha e certifique-se de estar em um local bem iluminado.</p>
+
+        <!-- Botão Centralizado -->
+        <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-primary" onclick="iniciarCaptura()">Iniciar Captura</button>
+        </div>
+    </div>
+
+    <script>
+        function iniciarCaptura() {
+            // Adicione a lógica para iniciar a captura aqui
+            window.location.href = 'capture-doc-img.html';
+        }
+    </script>
+</body>
+</html>
