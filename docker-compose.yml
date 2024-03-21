@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+
+  app:
+    build: "./app"
+    # env_file:
+    #   - ../tuse-env/env_file.env
+    container_name: app
+    volumes:
+      - ./app:/var/www/html
+    restart: always
+    ports:
+      - 7092:80
+
+  api:
+    build: "./api"
+    container_name: api
+    volumes:
+      - ./api:/home/app
+    network_mode: "bridge"
+    restart: always
+    ports:
+      - 8000:8000
+
+
+
